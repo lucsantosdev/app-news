@@ -8,7 +8,12 @@ const NewsBoard = ({category}) => {
 
     useEffect(() => {
         setLoading(true);
-        let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
+        // Use a API serverless do Vercel em produção, NewsAPI diretamente em desenvolvimento
+        const isProduction = window.location.hostname !== 'localhost';
+        const url = isProduction 
+            ? `/api/news?category=${category}&country=us`
+            : `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
+        
         fetch(url)
             .then(response => response.json())
             .then(data => {
